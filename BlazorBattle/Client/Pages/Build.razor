@@ -1,0 +1,13 @@
+﻿@page "/build"
+@inject IBananaService BananaSercice
+
+<h3>Build</h3>
+
+<button class="btn btn-primary" @onclick="() => EatBananans(10)">Eat Bananas</button>
+
+@code {
+    private void EatBananans(int amount)
+    {
+        BananaSercice.EatBananas(amount);
+    }
+}
