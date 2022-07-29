@@ -1,0 +1,66 @@
+﻿@page "/register"
+@inject IUnitService UnitService
+
+<h3>Register</h3>
+
+<EditForm Model="user" OnValidSubmit="HandleRegistration">
+    <div class="form-group">
+        <label for="email">Email</label>
+        <InputText id="email" @bind-Value="user.Email" class="form-control"></InputText>
+        <ValidationMessage For="@(() => user.Email)" />
+    </div>
+    <div class="form-group">
+        <label for="username">UserName</label>
+        <InputText id="username" @bind-Value="user.UserName" class="form-control"></InputText>
+        <ValidationMessage For="@(() => user.UserName)" />
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <InputText id="password" @bind-Value="user.Password" class="form-control" type="password"></InputText>
+        <ValidationMessage For="@(() => user.Password)" />
+    </div>
+    <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <InputText id="email" @bind-Value="user.ConfirmPassword" class="form-control" type="password"></InputText>
+        <ValidationMessage For="@(() => user.ConfirmPassword)" />
+    </div>
+    <div class="form-group">
+        <label for="bio">Bio</label>
+        <InputTextArea id="bio" @bind-Value="user.Bio" class="form-control"></InputTextArea>
+    </div>
+    <div class="form-group">
+        <label for="startUnit">Start Unit</label>
+        <InputSelect id="startUnit" @bind-Value="user.StartUnitId" class="form-control">
+            @foreach (var unit in UnitService.Units)
+            {
+                <option value="@unit.UnitId">@unit.Title </option>
+            }
+        </InputSelect>
+    </div>
+    <div class="form-group">
+        <label for="bananas">Bananas</label>
+        <InputNumber id="email" @bind-Value="user.Bananas" class="form-control"></InputNumber>
+        <ValidationMessage For="@(() => user.Bananas)" />
+    </div>
+    <div class="form-group">
+        <label for="dateOfBirth">Date Of Birth</label>
+        <InputDate id="dateOfBirth" @bind-Value="user.DateOfBirth" class="form-control"></InputDate>
+    </div>
+    <div class="form-check">
+        <InputCheckbox id="confirmed" @bind-Value="user.IsConfirmed" class="form-check-input"></InputCheckbox>
+        <label for="confirmed" class="form-check-label">Confirmed</label>
+        <ValidationMessage For="@(() => user.IsConfirmed)" />
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+
+</EditForm>
+
+@code {
+    UserRegister user = new UserRegister();
+
+    void HandleRegistration()
+    {
+        //TODO: Create database
+        Console.WriteLine("Store this new user in the database!");
+    }
+}
