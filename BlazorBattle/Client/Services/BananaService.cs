@@ -2,16 +2,22 @@
 {
     public class BananaService : IBananaService
     {
-        public event Action OnChange;
-
         public int Bananas { get; set; } = 1000;
 
-        public void EatBananas(int amount)
+        public event Action OnChange;
+
+        public void AddBananas(int amout)
         {
-            Bananas -= amount;
+            Bananas += amout;
             BananasChanged();
         }
 
-        void BananasChanged() => OnChange.Invoke();
+        public void EatBananas(int amout)
+        {
+            Bananas -= amout;
+            BananasChanged();
+        }
+
+        void BananasChanged() => OnChange?.Invoke();
     }
 }

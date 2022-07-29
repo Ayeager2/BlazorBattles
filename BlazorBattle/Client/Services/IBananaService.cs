@@ -3,8 +3,9 @@
     public interface IBananaService
     {
         event Action OnChange;
-         int Bananas { get; set; }
+        int Bananas { get; set; }
+        void EatBananas(int amout);
+        void AddBananas(int amout);
 
-        void EatBananas(int amount);
     }
 }
