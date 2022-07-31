@@ -1,0 +1,4 @@
+﻿.required::after{
+    font-weight:bold;
+    color:red;
+}
