@@ -2,6 +2,8 @@
 @inject IBananaService BananaSercice
 @inject IUnitService UnitService
 @inject IToastService ToastService
+@attribute [Authorize]
+
 <h3>Build</h3>
 <div class="form-group">
     <select @bind="selectedUnitId" class="form-control">

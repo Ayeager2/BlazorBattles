@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace BlazorBattle.Shared
 {
-    public class UserLogin
+    public class UserLogin : IUserLogin
     {
-        [Required (ErrorMessage = "Please enter a UserName.")]
+        [Required(ErrorMessage = "Please enter a UserName.")]
 
         public string UserName { get; set; }
         [Required(ErrorMessage = "Please enter a Password.")]
