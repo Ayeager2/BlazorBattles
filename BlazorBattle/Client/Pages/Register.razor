@@ -65,6 +65,11 @@
 @code {
     UserRegister user = new UserRegister();
 
+       protected override async Task OnInitializedAsync()
+    {
+        await UnitService.LoadUnitsAsync();
+    }
+
     void HandleRegistration()
     {
         //TODO: Create database

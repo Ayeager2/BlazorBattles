@@ -1,9 +1,12 @@
+using BlazorBattle.Server.Data;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddDbContext<DataContext>(options =>
+    options.UseSqlServer("name=ConnectionStrings:DefaultConnection"));
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
