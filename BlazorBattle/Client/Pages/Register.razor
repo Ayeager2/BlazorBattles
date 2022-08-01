@@ -1,7 +1,8 @@
 ﻿@page "/register"
 @inject IUnitService UnitService
-@inject IJSRuntime JSRuntime
 @inject NavigationManager NavigationManager 
+@inject IAuthService AuthService
+@inject IToastService ToastService
 
 <h3>Register</h3>
 
@@ -65,16 +66,23 @@
 @code {
     UserRegister user = new UserRegister();
 
-       protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         await UnitService.LoadUnitsAsync();
     }
 
-    void HandleRegistration()
+    async void HandleRegistration()
     {
         //TODO: Create database
-        Console.WriteLine("Store this new user in the database!");
-        JSRuntime.InvokeVoidAsync("console.log", user);
-        NavigationManager.NavigateTo("login");
+        var result = await AuthService.Register(user);
+        if (result.Success)
+        {
+            ToastService.ShowSuccess(result.Message);
+            NavigationManager.NavigateTo("/");
+        }
+        else
+        {
+            ToastService.ShowError(result.Message);
+        }         
     }
 }
