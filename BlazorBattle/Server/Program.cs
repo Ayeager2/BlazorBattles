@@ -1,4 +1,5 @@
 using BlazorBattle.Server.Data;
+using BlazorBattle.Server.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -27,7 +28,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };     
     });
 
-
+builder.Services.AddScoped<IUtilityService, UtilityService>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 
 var app = builder.Build();

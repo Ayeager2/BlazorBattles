@@ -5,7 +5,7 @@
         event Action OnChange;
         int Bananas { get; set; }
         void EatBananas(int amout);
-        void AddBananas(int amout);
+        Task AddBananas(int amout);
         Task GetBananas();
 
     }

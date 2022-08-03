@@ -14,9 +14,12 @@ namespace BlazorBattle.Client.Services
 
         public event Action OnChange;
 
-        public void AddBananas(int amout)
+        public async Task AddBananas(int amout)
         {
-            Bananas += amout;
+            var result = await _http.PutAsJsonAsync<int>("api/user/addbananas", amout);
+
+            Bananas = await result.Content.ReadFromJsonAsync<int>();
+
             BananasChanged();
         }
 
