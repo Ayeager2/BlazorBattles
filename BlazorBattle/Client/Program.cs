@@ -18,6 +18,7 @@ builder.Services.AddScoped<IBananaService, BananaService>();
 builder.Services.AddScoped<IUnitService, UnitService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ILeaderboardService, LeaderboardService>();
 
 builder.Services.AddOptions();
 builder.Services.AddAuthorizationCore();
