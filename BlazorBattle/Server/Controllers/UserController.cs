@@ -26,7 +26,7 @@ namespace BlazorBattle.Server.Controllers
         [HttpGet("getbananas")]
         public async Task<IActionResult> GetBananas()
         {
-            var user = await _utilityService.GetUser();       
+            var user = await _utilityService.GetUser();
 
             return Ok(user.Bananas);
         }
@@ -44,7 +44,7 @@ namespace BlazorBattle.Server.Controllers
         }
 
         [HttpGet("leaderboard")]
-        public async Task<IActionResult> GetLeaderboard() 
+        public async Task<IActionResult> GetLeaderboard()
         {
             var users = await _dataContext.Users.Where(user => !user.IsDeleted && user.IsConfirmed).ToListAsync();
             users = users
@@ -66,5 +66,62 @@ namespace BlazorBattle.Server.Controllers
             return Ok(response);
         }
 
+        [HttpPost("revive")]
+        public async Task<IActionResult> ReviveArmy()
+        {
+            var user = await _utilityService.GetUser();
+            var userUnits = await _dataContext.UserUnits
+                .Where(unit => unit.UserId == user.UserId)
+                .Include(unit => unit.Unit)
+                .ToListAsync();
+
+            int reviveCost = 1000;
+
+            if (user.Bananas < reviveCost)
+            {
+                return BadRequest("Not enough Bananas! You need 1000 Bananas to revive your army! ");
+            }
+
+            bool armyAlreadyAlive = true;
+
+            foreach (var userUnit in userUnits)
+            {
+                if (userUnit.HitPoints <= 0)
+                {
+                    armyAlreadyAlive = false;
+                    userUnit.HitPoints = new Random().Next(0, userUnit.Unit.HitPoints);
+                }
+            }
+            if (armyAlreadyAlive)
+                return Ok("Your army is already alive!");
+            user.Bananas -= reviveCost;
+            await _dataContext.SaveChangesAsync();
+            return Ok("Some of your army has revived!");
+        }
+
+        [HttpGet("history")]
+        public async Task<IActionResult> GetHistory()
+        {
+            var user = await _utilityService.GetUser();
+            var battles = await _dataContext.Battles
+                .Where(battle => battle.AttackerId == user.UserId || battle.OpponentId == user.UserId)
+                .Include(battle => battle.Attacker)
+                .Include(battle => battle.Opponent)
+                .Include(battle => battle.Winner)
+                .ToListAsync();
+            var history = battles.Select(battle => new BattleHistoryEntry
+            {
+                BattleId = battle.Id,
+                AttackerId = battle.AttackerId,
+                OpponenetId = battle.OpponentId,
+                YouWon = battle.WinnerId == user.UserId,
+                AttackerName = battle.Attacker.UserName,
+                OpponentName = battle.Opponent.UserName,
+                RoundsFought = battle.RoundsFought,
+                BattleDate = battle.BattleDate,
+                WinnderDamageDealt = battle.WinnerDamage
+            });
+            return Ok(history.OrderByDescending(h => h.BattleDate));
+        }
     }
 }

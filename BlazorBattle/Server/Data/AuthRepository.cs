@@ -40,7 +40,7 @@ namespace BlazorBattle.Server.Data
             return response;
         }
 
-        public async Task<ServiceResponse<int>> Register(User user, string password)
+        public async Task<ServiceResponse<int>> Register(User user, string password,int startUnitId)
         {
             if (await UserExists(user.Email))
             {
@@ -53,6 +53,9 @@ namespace BlazorBattle.Server.Data
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
+
+            await AddStartingUnit(user, startUnitId);
+
             return new ServiceResponse<int> { Data = user.UserId, Message = "Registraztion successful!" };
         }
 
@@ -109,6 +112,18 @@ namespace BlazorBattle.Server.Data
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);            
                 
             return jwt;
+        }
+
+        private async Task AddStartingUnit(User user, int startUnitId)
+        {
+            var unit = await _context.Units.FirstOrDefaultAsync<Unit>(u => u.UnitId == startUnitId);
+            _context.UserUnits.Add(new UserUnit
+            {
+                UnitId = unit.UnitId,
+                UserId = user.UserId,
+                HitPoints = unit.HitPoints
+            }) ;
+            await _context.SaveChangesAsync();
         }
     }
 }

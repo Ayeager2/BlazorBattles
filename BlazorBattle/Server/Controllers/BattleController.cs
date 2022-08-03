@@ -101,7 +101,7 @@ namespace BlazorBattle.Server.Controllers
                 randomOpponent.HitPoints = 0;
                 opponentArmy.Remove(randomOpponent);
                 result.BattleLog.Add(
-                    $"{attacker.UserName}'s {randomAttacker.Unit.Title} kills" +
+                    $"{attacker.UserName}'s {randomAttacker.Unit.Title} kills " +
                     $"{opponent.UserName}'s {randomOpponent.Unit.Title}!");
             }
             return damage;
@@ -129,8 +129,20 @@ namespace BlazorBattle.Server.Controllers
                 attacker.Bananas += opponentDamageSum * 10;
                 opponent.Bananas += attackerDamageSum;
             }
-
+            StoreBattleHistory(attacker, opponent, result);
             await _dataContext.SaveChangesAsync();
+        }
+
+        private void StoreBattleHistory(User attacker, User opponent, BattleResult result)
+        {
+            var battle = new Battle();
+            battle.Attacker = attacker;
+            battle.Opponent = opponent;
+            battle.RoundsFought = result.RoundsFought;
+            battle.WinnerDamage = result.IsVictory ? result.AttackDamageSum : result.OpponentDamageSum;
+            battle.Winner = result.IsVictory ? attacker : opponent;
+
+            _dataContext.Battles.Add(battle);  
         }
 
     }
