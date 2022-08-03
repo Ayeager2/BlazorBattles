@@ -73,7 +73,6 @@
 
     async void HandleRegistration()
     {
-        //TODO: Create database
         var result = await AuthService.Register(user);
         if (result.Success)
         {

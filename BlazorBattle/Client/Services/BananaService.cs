@@ -1,8 +1,16 @@
-﻿namespace BlazorBattle.Client.Services
+﻿using System.Net.Http.Json;
+
+namespace BlazorBattle.Client.Services
 {
     public class BananaService : IBananaService
     {
-        public int Bananas { get; set; } = 1000;
+        private readonly HttpClient _http;
+
+        public BananaService(HttpClient http)
+        {
+            _http = http;
+        }
+        public int Bananas { get; set; } = 0;
 
         public event Action OnChange;
 
@@ -15,6 +23,12 @@
         public void EatBananas(int amout)
         {
             Bananas -= amout;
+            BananasChanged();
+        }
+
+        public async Task GetBananas()
+        {
+            Bananas = await _http.GetFromJsonAsync<int>("api/user/getbananas");
             BananasChanged();
         }
 

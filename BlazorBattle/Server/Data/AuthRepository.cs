@@ -1,5 +1,8 @@
 ﻿using BlazorBattle.Shared;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
 
 namespace BlazorBattle.Server.Data
@@ -7,10 +10,12 @@ namespace BlazorBattle.Server.Data
     public class AuthRepository : IAuthRepository
     {
         private readonly DataContext _context;
+        private readonly IConfiguration _config;
 
-        public AuthRepository(DataContext context)
+        public AuthRepository(DataContext context, IConfiguration config)
         {
             _context = context;
+            _config = config;
         }
 
         public async Task<ServiceResponse<string>> Login(string email, string password)
@@ -18,7 +23,7 @@ namespace BlazorBattle.Server.Data
             var response = new ServiceResponse<string>();
             var user = await _context.Users.FirstOrDefaultAsync(user => user.Email.ToLower().Equals(email.ToLower()));
 
-            if(user == null)
+            if (user == null)
             {
                 response.Success = false;
                 response.Message = "User not found.";
@@ -30,7 +35,7 @@ namespace BlazorBattle.Server.Data
             }
             else
             {
-                response.Data = user.UserId.ToString();                
+                response.Data = CreateToken(user);
             }
             return response;
         }
@@ -76,13 +81,34 @@ namespace BlazorBattle.Server.Data
                 var computeHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
                 for (var i = 0; i < computeHash.Length; i++)
                 {
-                    if (computeHash[i] != password[i])
+                    if (computeHash[i] != passwordHash[i])
                     {
                         return false;
                     }
                 }
                 return true;
             }
+        }
+
+        private string CreateToken(User user)
+        {
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier , user.UserId.ToString()),
+                new Claim(ClaimTypes.Name, user.UserName)
+            };
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
+                _config.GetSection("AppSettings:Token").Value));
+
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            var token = new JwtSecurityToken(
+                claims: claims,
+                expires: DateTime.UtcNow.AddDays(1),
+                signingCredentials: creds);
+
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);            
+                
+            return jwt;
         }
     }
 }

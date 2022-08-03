@@ -11,9 +11,9 @@ namespace BlazorBattle.Server.Controllers
     {
         private readonly IAuthRepository _authRepo;
 
-        public AuthController(IAuthRepository authRepo)
+        public AuthController(IAuthRepository authRepository)
         {
-            _authRepo = authRepo;
+            _authRepo = authRepository;
         }
 
         [HttpPost("register")]
