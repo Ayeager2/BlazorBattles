@@ -1,6 +1,8 @@
 using BlazorBattle.Server.Data;
+using BlazorBattle.Server.Hubs;
 using BlazorBattle.Server.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -25,14 +27,25 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                          configuration.GetSection("AppSettings:Token").Value)),
             ValidateIssuer = false,
             ValidateAudience = false
-        };     
+        };
     });
 
 builder.Services.AddScoped<IUtilityService, UtilityService>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+builder.Services.AddSignalR();
+
+builder.Services.AddResponseCompression(options =>
+{
+    options.MimeTypes = ResponseCompressionDefaults
+        .MimeTypes
+        .Concat(new[] { "application/octet-stream" });
+});
+
 
 var app = builder.Build();
+
+app.UseResponseCompression();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -59,5 +72,6 @@ app.UseAuthorization();
 app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
+app.MapHub<ChatHub>("/chathub");
 
 app.Run();
