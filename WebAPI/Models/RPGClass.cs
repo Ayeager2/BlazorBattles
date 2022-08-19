@@ -1,5 +1,8 @@
+
+
 namespace WebAPI.Models
 {
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum RPGClass
     {
         Knight = 1,
