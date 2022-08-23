@@ -65,14 +65,15 @@ namespace WebAPI.Services.CharacterService
             return await Task.FromResult(response);
         }
 
-        public async Task<ServiceResponse<List<GetCharacterDTO>>> GetAllCharacters()
+        public async Task<ServiceResponse<List<GetCharacterDTO>>> GetAllCharacters(int userId)
         {
             var serviceResponse = new ServiceResponse<List<GetCharacterDTO>>();
             try
             {
-                var dbCharacters = await _context.Characaters.ToListAsync();
+                var dbCharacters = await _context.Characaters
+                .Where(c => c.User.Id == userId)
+                .ToListAsync();
                 serviceResponse.Data = dbCharacters.Select(c => _mapper.Map<GetCharacterDTO>(c)).ToList();
-                // serviceResponse.Data = characters.Select(c => _mapper.Map<GetCharacterDTO>(c)).ToList();
             }
             catch (Exception ex)
             {

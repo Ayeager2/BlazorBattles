@@ -8,7 +8,7 @@ namespace WebAPI.Services.CharacterService
 {
     public interface ICharacterService
     {
-        Task<ServiceResponse<List<GetCharacterDTO>>> GetAllCharacters();
+        Task<ServiceResponse<List<GetCharacterDTO>>> GetAllCharacters(int userId);
 
         Task<ServiceResponse<GetCharacterDTO>> GetCharacterById(int id);
 
