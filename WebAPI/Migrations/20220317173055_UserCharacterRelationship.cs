@@ -10,18 +10,18 @@ namespace WebAPI.Migrations
         {
             migrationBuilder.AddColumn<int>(
                 name: "UserId",
-                table: "Characaters",
+                table: "Characters",
                 type: "int",
                 nullable: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Characaters_UserId",
-                table: "Characaters",
+                name: "IX_Characters_UserId",
+                table: "Characters",
                 column: "UserId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Characaters_Users_UserId",
-                table: "Characaters",
+                name: "FK_Characters_Users_UserId",
+                table: "Characters",
                 column: "UserId",
                 principalTable: "Users",
                 principalColumn: "Id");
@@ -30,16 +30,16 @@ namespace WebAPI.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Characaters_Users_UserId",
-                table: "Characaters");
+                name: "FK_Characters_Users_UserId",
+                table: "Characters");
 
             migrationBuilder.DropIndex(
-                name: "IX_Characaters_UserId",
-                table: "Characaters");
+                name: "IX_Characters_UserId",
+                table: "Characters");
 
             migrationBuilder.DropColumn(
                 name: "UserId",
-                table: "Characaters");
+                table: "Characters");
         }
     }
 }

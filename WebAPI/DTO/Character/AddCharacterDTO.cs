@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 
 namespace WebAPI.DTO.Character
 {
-    public class AddCharacterDTO
+    public class AddCharacterDto
     {
         public string Name { get; set; } = "Ninny";
-        public int HitPoint { get; set; } = 100;
+        public int HitPoints { get; set; } = 100;
         public int Strength { get; set; } = 10;
         public int Defense { get; set; } = 10;
         public int Intelligence { get; set; } = 10;
-        public RPGClass Class { get; set; } = RPGClass.Knight;
+        public RpgClass Class { get; set; } = RpgClass.Knight;
     }
 }

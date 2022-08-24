@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using WebAPI.DTO.Character;
+using WebAPI.DTO.Skill;
 
 namespace WebAPI
 {
@@ -11,12 +12,16 @@ namespace WebAPI
     {
         public AutoMapperProfile()
         {
-            CreateMap<Characater, GetCharacterDTO>();
-            CreateMap<GetCharacterDTO, Characater>();
-            CreateMap<AddCharacterDTO, Characater>();
-            CreateMap<Characater, AddCharacterDTO>();
-            CreateMap<Characater, UpdateCharacterDTO>();
-            CreateMap<UpdateCharacterDTO, Characater>();
+            CreateMap<Character, GetCharacterDto>();
+            CreateMap<GetCharacterDto, Character>();
+            CreateMap<AddCharacterDto, Character>();
+            CreateMap<Character, AddCharacterDto>();
+            CreateMap<Character, UpdateCharacterDto>();
+            CreateMap<UpdateCharacterDto, Character>();
+            CreateMap<Weapon, GetWeaponDto>();
+            CreateMap<GetWeaponDto, Weapon>();
+            CreateMap<Skill, GetSkillDto>();
+            CreateMap<GetSkillDto, Skill>();
         }
     }
 }

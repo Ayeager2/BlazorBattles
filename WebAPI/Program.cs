@@ -8,15 +8,16 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Swashbuckle.AspNetCore.Filters;
 using Microsoft.OpenApi.Models;
+using WebAPI.Services.WeaponService;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<DataContext>(options =>
     //laptop connection string
-    // options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultconnectionLaptop"))
+    // options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionLaptop"))
 //Desktop Connection String
-options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultconnectionDesktop"))
+options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionDesktop"))
 
 );
 builder.Services.AddControllers();
@@ -32,10 +33,13 @@ builder.Services.AddSwaggerGen(c => {
     
     c.OperationFilter<SecurityRequirementsOperationFilter>();
 });
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<ICharacterService, CharacterService>();
+builder.Services.AddScoped<IWeaponService, WeaponService>();
+
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

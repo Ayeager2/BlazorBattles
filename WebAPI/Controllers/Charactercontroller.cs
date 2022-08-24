@@ -16,60 +16,56 @@ namespace WebAPI.Controllers
     public class CharacterController : ControllerBase
     {
         private readonly ICharacterService _characterService;
-
         public CharacterController(ICharacterService characterService)
         {
             _characterService = characterService;
         }
-        // [AllowAnonymous]
+
         [HttpGet("GetAll")]
-        public async Task<ActionResult<ServiceResponse<List<GetCharacterDTO>>>> Get()
+        public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> Get()
         {
-            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
-            return Ok(await _characterService.GetAllCharacters(userId));
+            return Ok(await _characterService.GetAllCharacters());
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> Delete(int id)
+        {
+            var response = await _characterService.DeleteCharacter(id);
+            if (response.Data == null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ServiceResponse<GetCharacterDTO>>> Get(int id)
+        public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> GetSingle(int id)
         {
             return Ok(await _characterService.GetCharacterById(id));
         }
 
-        [HttpPost()]
-        public async Task<ActionResult<ServiceResponse<List<GetCharacterDTO>>>> Add(AddCharacterDTO newCharacter)
+        [HttpPost]
+        public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> AddCharacter(AddCharacterDto newCharacter)
         {
             return Ok(await _characterService.AddCharacter(newCharacter));
         }
 
-        [HttpPut()]
-        public async Task<ActionResult<ServiceResponse<GetCharacterDTO>>> Update(UpdateCharacterDTO updatedCharacter)
+        [HttpPut]
+        public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> UpdateCharacter(UpdateCharacterDto updatedCharacter)
         {
             var response = await _characterService.UpdateCharacter(updatedCharacter);
-            if (response.Success)
+            if (response.Data == null)
             {
-                return Ok(await _characterService.UpdateCharacter(updatedCharacter));
-
+                return NotFound(response);
             }
-            else
-            {
-                return BadRequest(response);
-            }
+            return Ok(response);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<ServiceResponse<List<GetCharacterDTO>>>> Delete(int id)
-        {
-            var response = await _characterService.DeleteCharacter(id);
-            
-            if (response.Success)
-            {
-                return Ok(await _characterService.DeleteCharacter(id));
 
-            }
-            else
-            {
-                return BadRequest(response);
-            }
+        [HttpPost("Skill")]
+        public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> AddCharacterSkill(AddCharacterSkillDto newCharacterSkill)
+        {
+            return Ok(await _characterService.AddCharacterSkill(newCharacterSkill));
         }
     }
-}
+    }
