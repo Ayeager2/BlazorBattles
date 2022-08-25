@@ -22,6 +22,10 @@ namespace WebAPI
             CreateMap<GetWeaponDto, Weapon>();
             CreateMap<Skill, GetSkillDto>();
             CreateMap<GetSkillDto, Skill>();
+            CreateMap<AddSkillDto, Skill>();
+            CreateMap<Skill, AddSkillDto>();
+            CreateMap<GetSkillDto, Skill>();
+            CreateMap<Skill, GetSkillDto>();
         }
     }
 }

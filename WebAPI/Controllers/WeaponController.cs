@@ -12,7 +12,7 @@ namespace WebAPI.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class WeaponController : ControllerBase
     {
         private readonly IWeaponService _weaponService;
