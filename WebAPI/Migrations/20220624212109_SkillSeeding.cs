@@ -16,12 +16,12 @@ namespace WebAPI.Migrations
             migrationBuilder.InsertData(
                 table: "Skills",
                 columns: new[] { "Id", "Damage", "Name" },
-                values: new object[] { 2, 20, "Frenzy" });
+                values: new object[] { 2, 25, "ShieldBash" });
 
             migrationBuilder.InsertData(
                 table: "Skills",
                 columns: new[] { "Id", "Damage", "Name" },
-                values: new object[] { 3, 50, "Blizzard" });
+                values: new object[] { 3, 3, "Poke" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

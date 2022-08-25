@@ -17,5 +17,8 @@ namespace WebAPI.DTO.Character
         public RpgClass Class { get; set; } = RpgClass.Knight;
         public GetWeaponDto Weapon { get; set; }
         public List<GetSkillDto> Skills { get; set; }
+        public int Battles { get; set; }
+        public int Victories { get; set; }
+        public int Defeates { get; set; }
     }
 }
