@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Data;
 using WebAPI.DTO.Fight;
@@ -11,11 +12,14 @@ namespace WebAPI.Services.FightService
     public class FightService : IFightService
     {
         private readonly DataContext _context;
+        private readonly IMapper _mapper;
 
-        public FightService(DataContext context)
+        public FightService(DataContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
+
 
         public async Task<ServiceResponse<FightResultDto>> Fight(FightRequestDto request)
         {
@@ -78,7 +82,7 @@ namespace WebAPI.Services.FightService
                        c.HitPoints = 100;
                        c.Battles++;
                    });
-                   await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync();
                 }
             }
             catch (Exception ex)
@@ -206,6 +210,28 @@ namespace WebAPI.Services.FightService
             if (damage > 0)
                 defender.HitPoints -= damage;
             return damage;
+        }
+
+        public async Task<ServiceResponse<List<HighScoreDto>>> GetHighScore()
+        {
+             var response = new ServiceResponse<List<HighScoreDto>>();
+            var characters = await _context.Characters
+                .Where(c => c.Battles > 0)
+                .OrderByDescending(c => c.Victories)
+                .ThenBy(c => c.Defeats)
+                .ToListAsync();
+            if (characters == null)
+            {
+                response.Success = false;
+                response.Message = "No characters found";
+                return response;
+            }
+            response = new ServiceResponse<List<HighScoreDto>>
+            {
+                Data = characters.Select(c => _mapper.Map<HighScoreDto>(c)).ToList()
+            };
+        
+            return response;
         }
     }
 }

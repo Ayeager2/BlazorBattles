@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using WebAPI.DTO.Character;
+using WebAPI.DTO.Fight;
 using WebAPI.DTO.Skill;
 
 namespace WebAPI
@@ -26,6 +27,8 @@ namespace WebAPI
             CreateMap<Skill, AddSkillDto>();
             CreateMap<GetSkillDto, Skill>();
             CreateMap<Skill, GetSkillDto>();
+            CreateMap<Character, HighScoreDto>();
+            CreateMap<HighScoreDto, Character>();
         }
     }
 }
