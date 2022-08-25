@@ -6,7 +6,7 @@ using WebAPI.Services.SkillService;
 
 namespace WebAPI.Controllers 
 {
-    // [Authorize]
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class SkillController : ControllerBase

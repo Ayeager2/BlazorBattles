@@ -19,6 +19,6 @@ namespace WebAPI.Models
         public List<Skill> Skills { get; set; }
         public int Battles { get; set; }
         public int Victories { get; set; }
-        public int Defeates { get; set; }
+        public int Defeats { get; set; }
     }
 }

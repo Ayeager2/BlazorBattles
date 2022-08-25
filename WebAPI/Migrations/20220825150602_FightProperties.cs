@@ -16,7 +16,7 @@ namespace WebAPI.Migrations
                 defaultValue: 0);
 
             migrationBuilder.AddColumn<int>(
-                name: "Defeates",
+                name: "Defeats",
                 table: "Characters",
                 type: "int",
                 nullable: false,
@@ -37,7 +37,7 @@ namespace WebAPI.Migrations
                 table: "Characters");
 
             migrationBuilder.DropColumn(
-                name: "Defeates",
+                name: "Defeats",
                 table: "Characters");
 
             migrationBuilder.DropColumn(

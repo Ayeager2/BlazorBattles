@@ -10,6 +10,7 @@ using Swashbuckle.AspNetCore.Filters;
 using Microsoft.OpenApi.Models;
 using WebAPI.Services.WeaponService;
 using WebAPI.Services.SkillService;
+using WebAPI.Services.FightService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +42,7 @@ builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<ICharacterService, CharacterService>();
 builder.Services.AddScoped<IWeaponService, WeaponService>();
 builder.Services.AddScoped<ISkillService, SkillService>();
+builder.Services.AddScoped<IFightService, FightService>();
 
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
